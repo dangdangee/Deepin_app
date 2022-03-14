@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
 import 'package:flutter_netflix_responsive_ui/data/data.dart';
 import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
+import 'package:flutter_netflix_responsive_ui/assets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -34,6 +35,69 @@ class _HomeScreenState extends State<HomeScreen> {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: true,
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.black,
+        child: Row(
+          children: [
+            InkWell(
+              onTap: () => {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      // title: new Text("Alert Dialog title"),
+                      content: new Text("I'm interested in soccer, music, movie!"),
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+                )
+              },
+              child:Container(
+                padding: EdgeInsets.all(3),
+                width: screenSize.width/3,
+                child: Image.asset(Assets.monkey),
+              ),
+            ),
+            InkWell(
+              onTap: ()=>print('click'),
+              child:Container(
+                padding: EdgeInsets.all(3),
+                width: screenSize.width/3,
+                child: Image.asset(Assets.monkey),
+              ),
+            ),
+            InkWell(
+              onTap: ()=>print('click'),
+              child:Container(
+                padding: EdgeInsets.all(3),
+                width: screenSize.width/3,
+                child: Image.asset(Assets.monkey),
+              ),
+            ),
+          ],
+        ),
+      ),
+      // PreferredSize(
+      //   preferredSize: Size(screenSize.width, 100.0),
+      //   child: BottomAppBar(
+      //     child: Container(
+      //       color: Colors.black,
+      //       child: Text('1123'),
+      //     ),
+      //     // child: BlocBuilder<AppBarCubit, double>(
+      //     //   builder: (context, scrollOffset) {
+      //     //     return CustomAppBar(scrollOffset: scrollOffset);
+      //     //   },
+      //     // ),
+      //   ),
+      // ),
       // floatingActionButton: FloatingActionButton(
       //   backgroundColor: Colors.grey[850],
       //   child: const Icon(Icons.cast),
@@ -53,16 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             child: ContentHeader(featuredContent: sintelContent),
           ),
-          // SliverPadding(
-          //   padding: const EdgeInsets.only(top: 20.0),
-          //   sliver: SliverToBoxAdapter(
-          //     child: Previews(
-          //       key: PageStorageKey('previews'),
-          //       title: 'Previews',
-          //       contentList: previews,
-          //     ),
-          //   ),
-          // ),
           SliverToBoxAdapter(
             child: ContentList(
               key: PageStorageKey('myList'),
@@ -78,16 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
               // isOriginals: true,
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 20.0),
-            sliver: SliverToBoxAdapter(
-              child: ContentList(
-                key: PageStorageKey('trending'),
-                title: 'Trending',
-                contentList: trending,
-              ),
+          SliverToBoxAdapter(
+            child: ContentList(
+              key: PageStorageKey('trending'),
+              title: 'Trending',
+              contentList: trending,
             ),
-          )
+          ),
         ],
       ),
     );
