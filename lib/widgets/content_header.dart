@@ -82,7 +82,8 @@ class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
     VideoPlayerController.asset(widget.featuredContent.videoUrl)
       ..initialize().then((_) => setState(() {}))
       ..setVolume(0)
-      ..play();
+      ..play()
+      ..setLooping(true);
   }
 
   @override
@@ -90,6 +91,7 @@ class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
     _videoController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {

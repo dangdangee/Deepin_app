@@ -28,6 +28,13 @@ class CustomAppBar extends StatelessWidget {
   }
 }
 
+List <String>subjectList = [
+  'Soccer',
+  'Music',
+  'Webtoon',
+  'Investment'
+];
+
 class _CustomAppBarMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,21 +44,34 @@ class _CustomAppBarMobile extends StatelessWidget {
           Image.asset(Assets.netflixLogo0),
           const SizedBox(width: 12.0),
           Expanded(
+
+            // child: ListView.builder(
+            //     scrollDirection: Axis.horizontal,
+            //     itemCount: 3,
+            //     itemBuilder: (BuildContext context, int index) => Container(
+            //       height: 1,
+            //       width: 1,
+            //       margin: EdgeInsets.all(5),
+            //       child: Center(
+            //         child: Text('11'),
+            //       ),
+            //     )
+            // )
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _AppBarButton(
-                  title: 'TV Shows',
-                  onTap: () => print('TV Shows'),
-                ),
-                _AppBarButton(
-                  title: 'Movies',
-                  onTap: () => print('Movies'),
-                ),
-                _AppBarButton(
-                  title: 'My List',
-                  onTap: () => print('My List'),
-                ),
+                // ListView.builder(
+                //   scrollDirection: Axis.horizontal,
+                //   itemCount: subjectList.length,
+                //   itemBuilder: (BuildContext context, int index) => Container(
+                //     height: 100,
+                //     width: 100,
+                //     margin: EdgeInsets.all(5),
+                //     child: Center(
+                //       child: Text(subjectList[index]),
+                //     ),
+                //   )
+                // )
               ],
             ),
           ),
