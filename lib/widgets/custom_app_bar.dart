@@ -49,12 +49,23 @@ class _CustomAppBarMobile extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: subjectList.length,
                 itemBuilder: (BuildContext context, int index) => Container(
-                  color: Colors.white,
+                  // color: Colors.white,
                   height: 100,
                   width: 100,
                   margin: EdgeInsets.all(5),
                   child: Center(
-                    child: Text(subjectList[index]),
+                    child: ElevatedButton(
+                      // style: ButtonStyle(
+                      //   backgroundColor: MaterialStateProperty<Color>{}
+                      // ),
+                      onPressed: ()=>print('click'),
+                      child: Text(
+                        subjectList[index],
+                        softWrap: true,
+                        // textScaleFactor: 0.1,
+                      ),
+                    ),
+                    // child: Text(subjectList[index]),
                   ),
                 )
             )

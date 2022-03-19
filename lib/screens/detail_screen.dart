@@ -1,43 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
 
-class DetailScreen extends StatefulWidget {
-  _DetailScreenState createState() => _DetailScreenState();
+class DetailScreen extends StatelessWidget {
+  final Content content;
+  // _DetailScreenState createState() => _DetailScreenState();
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   // TODO: implement build
-  //   throw UnimplementedError();
-  // }
-  
-  
-}
-
-class _DetailScreenState extends State<DetailScreen>{
+    const DetailScreen({
+    @required this.content
+});
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: 200,
-        decoration: BoxDecoration(
-          color: Colors.lightBlueAccent,
+      appBar: AppBar(
+        toolbarHeight: MediaQuery.of(context).size.height/20,
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          color: Colors.white,
+          onPressed: (){Navigator.pop(context);},
+          icon: Icon(Icons.arrow_back)
         ),
-        child: Row(
-          children: [
-            ElevatedButton(
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),]
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(content.imageUrl),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
-  }
-}
-
-
+  }}

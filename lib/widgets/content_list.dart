@@ -33,7 +33,7 @@ class ContentList extends StatelessWidget {
             ),
           ),
           Container(
-            height: isOriginals ? 500.0 : 220.0,
+            height: 220.0,
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(
                 vertical: 12.0,
@@ -48,14 +48,17 @@ class ContentList extends StatelessWidget {
                       MaterialPageRoute(
                         fullscreenDialog: true,
                         builder: (BuildContext context) {
-                          return DetailScreen();
+                          // return DetailScreen(contentList[index]);
+                          return DetailScreen(
+                            content: contentList[index],
+                          );
                       }
                   )),
                   // onTap: () => print(content.name),
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    height: isOriginals ? 400.0 : 200.0,
-                    width: isOriginals ? 200.0 : 130.0,
+                    height: 200.0,
+                    width: 130.0,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(content.imageUrl),

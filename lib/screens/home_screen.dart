@@ -66,7 +66,25 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             InkWell(
-              onTap: ()=>print('click'),
+              onTap: ()=>{
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      // title: new Text("Alert Dialog title"),
+                      content: new Text("I'm interested in NFT, music, dogs!"),
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                )
+              },
               child:Container(
                 padding: EdgeInsets.all(3),
                 width: screenSize.width/3,
@@ -74,7 +92,25 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             InkWell(
-              onTap: ()=>print('click'),
+              onTap: ()=>{
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      // title: new Text("Alert Dialog title"),
+                      content: new Text("I'm interested in cats, NBA, MLB!"),
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("Close"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                )
+              },
               child:Container(
                 padding: EdgeInsets.all(3),
                 width: screenSize.width/3,
@@ -84,25 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      // PreferredSize(
-      //   preferredSize: Size(screenSize.width, 100.0),
-      //   child: BottomAppBar(
-      //     child: Container(
-      //       color: Colors.black,
-      //       child: Text('1123'),
-      //     ),
-      //     // child: BlocBuilder<AppBarCubit, double>(
-      //     //   builder: (context, scrollOffset) {
-      //     //     return CustomAppBar(scrollOffset: scrollOffset);
-      //     //   },
-      //     // ),
-      //   ),
-      // ),
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.grey[850],
-      //   child: const Icon(Icons.cast),
-      //   onPressed: () => print('Cast'),
-      // ),
       appBar: PreferredSize(
         preferredSize: Size(screenSize.width, 50.0),
         child: BlocBuilder<AppBarCubit, double>(
