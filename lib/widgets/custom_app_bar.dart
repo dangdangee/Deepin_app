@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:flutter_netflix_responsive_ui/assets.dart';
 import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
+import 'package:flutter_netflix_responsive_ui/src/authentication.dart';
+
 
 class CustomAppBar extends StatelessWidget {
   final double scrollOffset;
 
   const CustomAppBar({
-    Key key,
+    Key? key,
     this.scrollOffset = 0.0,
   }) : super(key: key);
 
@@ -19,10 +22,12 @@ class CustomAppBar extends StatelessWidget {
         horizontal: 24.0,
       ),
       color:
-          Colors.black.withOpacity((scrollOffset / 350).clamp(0, 1).toDouble()),
+        Colors.black.withOpacity((scrollOffset / 350).clamp(0, 1).toDouble()),
       child: Responsive(
-        mobile: _CustomAppBarMobile(),
-        desktop: _CustomAppBarDesktop(),
+        mobile: Consumer<ApplicationState>(builder: (context, appState, _) =>
+                _CustomAppBarMobile(signOut:appState.signOut)),
+        desktop: Consumer<ApplicationState>(builder: (context, appState, _) =>
+            _CustomAppBarDesktop(signOut:appState.signOut)),
       ),
     );
   }
@@ -36,39 +41,50 @@ List <String>subjectList = [
 ];
 
 class _CustomAppBarMobile extends StatelessWidget {
+  const _CustomAppBarMobile({
+    required this.signOut,
+  });
+  final void Function() signOut;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Row(
         children: [
           Image.asset(Assets.netflixLogo0),
-          const SizedBox(width: 12.0),
           Expanded(
-            child:ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: subjectList.length,
-                itemBuilder: (BuildContext context, int index) => Container(
-                  // color: Colors.white,
-                  height: 100,
-                  width: 100,
-                  margin: EdgeInsets.all(5),
-                  child: Center(
-                    child: ElevatedButton(
-                      // style: ButtonStyle(
-                      //   backgroundColor: MaterialStateProperty<Color>{}
-                      // ),
-                      onPressed: ()=>print('click'),
-                      child: Text(
-                        subjectList[index],
-                        softWrap: true,
-                        // textScaleFactor: 0.1,
+              child:ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: subjectList.length,
+                  itemBuilder: (BuildContext context, int index) => Container(
+                    //color: Colors.white,
+                    height: 100,
+                    width: 100,
+                    margin: EdgeInsets.all(5),
+                    child: Center(
+                      child: ElevatedButton(
+                        // style: ButtonStyle(
+                        //   backgroundColor: MaterialStateProperty<Color>{}
+                        // ),
+                        onPressed: ()=>print('click'),
+                        child: Text(
+                          subjectList[index],
+                          softWrap: true,
+                          // textScaleFactor: 0.1,
+                        ),
                       ),
                     ),
-                    // child: Text(subjectList[index]),
-                  ),
-                )
-            )
+                  )
+              )
+          ),
+          IconButton(
+              iconSize: 30,
+              color: Colors.blue[300],
+              padding: EdgeInsets.only(bottom:10),
+              icon: const Icon(Icons.logout),
+              tooltip: 'Logout',
+              onPressed: signOut
           ),
         ],
       ),
@@ -77,6 +93,11 @@ class _CustomAppBarMobile extends StatelessWidget {
 }
 
 class _CustomAppBarDesktop extends StatelessWidget {
+  const _CustomAppBarDesktop({
+    required this.signOut,
+  });
+  final void Function() signOut;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -148,6 +169,11 @@ class _CustomAppBarDesktop extends StatelessWidget {
               ],
             ),
           ),
+          IconButton(
+            icon: const Icon(Icons.logout_outlined),
+            tooltip: 'Logout',
+            onPressed: signOut
+          ),
         ],
       ),
     );
@@ -155,11 +181,11 @@ class _CustomAppBarDesktop extends StatelessWidget {
 }
 
 class _AppBarButton extends StatelessWidget {
-  final String title;
-  final Function onTap;
+  final String? title;
+  final void Function()? onTap;
 
   const _AppBarButton({
-    Key key,
+    Key? key,
     @required this.title,
     @required this.onTap,
   }) : super(key: key);
@@ -169,7 +195,7 @@ class _AppBarButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Text(
-        title,
+        title!,
         style: const TextStyle(
           color: Colors.white,
           fontSize: 16.0,

@@ -5,18 +5,18 @@ import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
 import 'package:video_player/video_player.dart';
 
 class ContentHeader extends StatelessWidget {
-  final Content featuredContent;
+  final Content? featuredContent;
 
   const ContentHeader({
-    Key key,
+    Key? key,
     @required this.featuredContent,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Responsive(
-      mobile: _ContentHeaderMobile(featuredContent: featuredContent),
-      desktop: _ContentHeaderDesktop(featuredContent: featuredContent),
+      mobile: _ContentHeaderMobile(featuredContent: featuredContent!),
+      desktop: _ContentHeaderDesktop(featuredContent: featuredContent!),
     );
   }
 }
@@ -60,10 +60,10 @@ class ContentHeader extends StatelessWidget {
 // }
 
 class _ContentHeaderMobile extends StatefulWidget{
-  final Content featuredContent;
+  final Content? featuredContent;
 
   const _ContentHeaderMobile({
-    Key key,
+    Key? key,
     @required this.featuredContent,
   }) : super(key: key);
 
@@ -72,14 +72,14 @@ class _ContentHeaderMobile extends StatefulWidget{
 }
 
 class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
-  VideoPlayerController _videoController;
+  VideoPlayerController? _videoController;
   bool _isMuted = true;
 
   @override
   void initState() {
     super.initState();
     _videoController =
-    VideoPlayerController.asset(widget.featuredContent.videoUrl)
+    VideoPlayerController.asset(widget.featuredContent!.videoUrl!)
       ..initialize().then((_) => setState(() {}))
       ..setVolume(0)
       ..play()
@@ -88,7 +88,7 @@ class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
 
   @override
   void dispose() {
-    _videoController.dispose();
+    _videoController!.dispose();
     super.dispose();
   }
 
@@ -96,20 +96,20 @@ class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _videoController.value.isPlaying
-          ? _videoController.pause()
-          : _videoController.play(),
+      onTap: () => _videoController!.value.isPlaying
+          ? _videoController!.pause()
+          : _videoController!.play(),
       child: Stack(
         alignment: Alignment.center,
         children: [
           AspectRatio(
-            aspectRatio: _videoController.value.initialized
-                ? _videoController.value.aspectRatio
+            aspectRatio: _videoController!.value.isInitialized
+                ? _videoController!.value.aspectRatio
                 : 1,
-            child: _videoController.value.initialized
-                ? VideoPlayer(_videoController)
+            child: _videoController!.value.isInitialized
+                ? VideoPlayer(_videoController!)
                 : Image.asset(
-              widget.featuredContent.imageUrl,
+              widget.featuredContent!.imageUrl!,
               fit: BoxFit.cover,
             ),
           ),
@@ -122,7 +122,7 @@ class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
                 Row(
                   children: [
                     const SizedBox(width: 20.0),
-                    if (_videoController.value.initialized)
+                    if (_videoController!.value.isInitialized)
                       IconButton(
                         icon: Icon(
                           _isMuted ? Icons.volume_off : Icons.volume_up,
@@ -131,9 +131,9 @@ class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
                         iconSize: 30.0,
                         onPressed: () => setState(() {
                           _isMuted
-                              ? _videoController.setVolume(100)
-                              : _videoController.setVolume(0);
-                          _isMuted = _videoController.value.volume == 0;
+                              ? _videoController!.setVolume(100)
+                              : _videoController!.setVolume(0);
+                          _isMuted = _videoController!.value.volume == 0;
                         }),
                       ),
                   ],
@@ -148,10 +148,10 @@ class __ContentHeaderMobileState extends State<_ContentHeaderMobile> {
 }
 
 class _ContentHeaderDesktop extends StatefulWidget {
-  final Content featuredContent;
+  final Content? featuredContent;
 
   const _ContentHeaderDesktop({
-    Key key,
+    Key? key,
     @required this.featuredContent,
   }) : super(key: key);
 
@@ -160,14 +160,14 @@ class _ContentHeaderDesktop extends StatefulWidget {
 }
 
 class __ContentHeaderDesktopState extends State<_ContentHeaderDesktop> {
-  VideoPlayerController _videoController;
+  VideoPlayerController? _videoController;
   bool _isMuted = true;
 
   @override
   void initState() {
     super.initState();
     _videoController =
-        VideoPlayerController.network(widget.featuredContent.videoUrl)
+        VideoPlayerController.network(widget.featuredContent!.videoUrl!)
           ..initialize().then((_) => setState(() {}))
           ..setVolume(0)
           ..play();
@@ -175,27 +175,27 @@ class __ContentHeaderDesktopState extends State<_ContentHeaderDesktop> {
 
   @override
   void dispose() {
-    _videoController.dispose();
+    _videoController!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _videoController.value.isPlaying
-          ? _videoController.pause()
-          : _videoController.play(),
+      onTap: () => _videoController!.value.isPlaying
+          ? _videoController!.pause()
+          : _videoController!.play(),
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
           AspectRatio(
-            aspectRatio: _videoController.value.initialized
-                ? _videoController.value.aspectRatio
+            aspectRatio: _videoController!.value.isInitialized
+                ? _videoController!.value.aspectRatio
                 : 2.344,
-            child: _videoController.value.initialized
-                ? VideoPlayer(_videoController)
+            child: _videoController!.value.isInitialized
+                ? VideoPlayer(_videoController!)
                 : Image.asset(
-                    widget.featuredContent.imageUrl,
+                    widget.featuredContent!.imageUrl!,
                     fit: BoxFit.cover,
                   ),
           ),
@@ -204,8 +204,8 @@ class __ContentHeaderDesktopState extends State<_ContentHeaderDesktop> {
             right: 0,
             bottom: -1.0,
             child: AspectRatio(
-              aspectRatio: _videoController.value.initialized
-                  ? _videoController.value.aspectRatio
+              aspectRatio: _videoController!.value.isInitialized
+                  ? _videoController!.value.aspectRatio
                   : 2.344,
               child: Container(
                 decoration: const BoxDecoration(
@@ -228,7 +228,7 @@ class __ContentHeaderDesktopState extends State<_ContentHeaderDesktop> {
                 Row(
                   children: [
                     const SizedBox(width: 20.0),
-                    if (_videoController.value.initialized)
+                    if (_videoController!.value.isInitialized)
                       IconButton(
                         icon: Icon(
                           _isMuted ? Icons.volume_off : Icons.volume_up,
@@ -237,9 +237,9 @@ class __ContentHeaderDesktopState extends State<_ContentHeaderDesktop> {
                         iconSize: 30.0,
                         onPressed: () => setState(() {
                           _isMuted
-                              ? _videoController.setVolume(100)
-                              : _videoController.setVolume(0);
-                          _isMuted = _videoController.value.volume == 0;
+                              ? _videoController!.setVolume(100)
+                              : _videoController!.setVolume(0);
+                          _isMuted = _videoController!.value.volume == 0;
                         }),
                       ),
                   ],

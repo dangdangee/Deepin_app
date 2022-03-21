@@ -6,27 +6,27 @@ import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
 import 'package:flutter_netflix_responsive_ui/assets.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ScrollController _scrollController;
+  ScrollController? _scrollController;
 
   @override
   void initState() {
     _scrollController = ScrollController()
       ..addListener(() {
-        context.bloc<AppBarCubit>().setOffset(_scrollController.offset);
+        context.read<AppBarCubit>().setOffset(_scrollController!.offset);
       });
     super.initState();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController!.dispose();
     super.dispose();
   }
 
@@ -51,12 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         new FlatButton(
                           child: new Text("Close"),
                           onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                },
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 )
               },
               child:Container(
