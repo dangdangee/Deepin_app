@@ -7,7 +7,9 @@ class Assets {
   static const String person1 = '${_images}Person1.png';
   static const String person2 = '${_images}Person2.png';
   static const String person3 = '${_images}Person3.png';
-  static const String monkey = '${_images}monkey.jpeg';
+  static const String profile1 = '${_images}duck.png';
+  static const String profile2 = '${_images}plague_doctor.png';
+  static const String profile3 = '${_images}scary.png';
 
   static const String sintel = '${_images}sintel.jpg';
   static const String sintelTitle = '${_images}sintel_title.png';

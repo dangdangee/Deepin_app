@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,
         child: Row(
@@ -46,10 +46,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       // title: new Text("Alert Dialog title"),
-                      content: new Text("I'm interested in soccer, music, movie!"),
+                      content: Wrap(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Image.asset(Assets.profile1),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(0),
+                            child: Text("I'm interested in soccer, music, movie!"),
+                          ),
+                        ],
+                      ),
                       actions: <Widget>[
-                        new FlatButton(
-                          child: new Text("Close"),
+                        TextButton(
+                          child: Text("Close"),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -62,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child:Container(
                 padding: EdgeInsets.all(3),
                 width: screenSize.width/3,
-                child: Image.asset(Assets.monkey),
+                child: Image.asset(Assets.profile1),
               ),
             ),
             InkWell(
@@ -72,10 +83,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       // title: new Text("Alert Dialog title"),
-                      content: new Text("I'm interested in NFT, music, dogs!"),
+                      content: Wrap(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Image.asset(Assets.profile2),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(0),
+                            child: Text("I'm interested in soccer, music, movie!"),
+                          ),
+                        ],
+                      ),
                       actions: <Widget>[
-                        new FlatButton(
-                          child: new Text("Close"),
+                        TextButton(
+                          child: Text("Close"),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -88,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child:Container(
                 padding: EdgeInsets.all(3),
                 width: screenSize.width/3,
-                child: Image.asset(Assets.monkey),
+                child: Image.asset(Assets.profile2),
               ),
             ),
             InkWell(
@@ -98,10 +120,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       // title: new Text("Alert Dialog title"),
-                      content: new Text("I'm interested in cats, NBA, MLB!"),
+                      content: Wrap(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Image.asset(Assets.profile3),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(0),
+                            child: Text("I'm interested in soccer, music, movie!"),
+                          ),
+                        ],
+                      ),
                       actions: <Widget>[
-                        new FlatButton(
-                          child: new Text("Close"),
+                        TextButton(
+                          child: Text("Close"),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -114,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child:Container(
                 padding: EdgeInsets.all(3),
                 width: screenSize.width/3,
-                child: Image.asset(Assets.monkey),
+                child: Image.asset(Assets.profile3),
               ),
             ),
           ],
@@ -131,9 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverToBoxAdapter(
+          /*SliverToBoxAdapter(
             child: ContentHeader(featuredContent: sintelContent),
-          ),
+          ),*/
           SliverToBoxAdapter(
             child: ContentList(
               key: PageStorageKey('myList'),
