@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_netflix_responsive_ui/src/utils.dart';
 
-class Content extends ChangeNotifier {
+class Content {
   final String? name;
   final String? imageUrl;
   final String? titleImageUrl;
   final String? videoUrl;
   final String? description;
   final Color? color;
-  final List<String> touched_users=[];
 
   Content({
     @required this.name,
@@ -19,15 +18,11 @@ class Content extends ChangeNotifier {
     this.color,
   });
 
-  void touch(String user_id, String content_name) {
-    print(user_id);
-    print(content_name);
-    touched_users.add(user_id);
-    notifyListeners();
-  }
-
-  void clear(String user_id) {
-    touched_users.remove(user_id);
-    notifyListeners();
+  void touch(String displayName, bool? exists) {
+    if (exists == true) {
+      eraseRoomUserTouch(displayName);
+    } else {
+      writeRoomUserTouch(displayName, this.name!);
+    }
   }
 }

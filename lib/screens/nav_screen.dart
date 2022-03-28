@@ -3,7 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
 import 'package:flutter_netflix_responsive_ui/screens/screens.dart';
 
+
 class NavScreen extends StatefulWidget {
+  int? currentIndex;
+  NavScreen({
+    Key? key,
+    @required this.currentIndex,
+  }) : super(key: key);
   @override
   _NavScreenState createState() => _NavScreenState();
 }
@@ -11,28 +17,21 @@ class NavScreen extends StatefulWidget {
 class _NavScreenState extends State<NavScreen> {
   final List<Widget> _screens = [
     HomeScreen(key: PageStorageKey('homeScreen')),
-    Scaffold(),
+    HomeScreen(key: PageStorageKey('homeScreen')),
     Scaffold(),
     Scaffold(),
     Scaffold(),
   ];
 
-  final Map<String, IconData> _icons = const {
-    'Home': Icons.home,
-    'Search': Icons.search,
-    'Coming Soon': Icons.queue_play_next,
-    'Downloads': Icons.file_download,
-    'More': Icons.menu,
-  };
-
-  int _currentIndex = 0;
+  int? _currentIndex;
 
   @override
   Widget build(BuildContext context) {
+    _currentIndex = widget.currentIndex;
     return Scaffold(
       body: BlocProvider<AppBarCubit>(
         create: (_) => AppBarCubit(),
-        child: _screens[_currentIndex],
+        child: _screens[_currentIndex!],
       ),
     );
   }

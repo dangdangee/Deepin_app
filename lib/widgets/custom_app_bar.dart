@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_netflix_responsive_ui/assets.dart';
 import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
+import 'package:flutter_netflix_responsive_ui/src/utils.dart';
 import 'package:flutter_netflix_responsive_ui/src/authentication.dart';
-
 
 class CustomAppBar extends StatelessWidget {
   final double scrollOffset;
@@ -67,7 +67,8 @@ class _CustomAppBarMobile extends StatelessWidget {
                         // style: ButtonStyle(
                         //   backgroundColor: MaterialStateProperty<Color>{}
                         // ),
-                        onPressed: ()=>print('click'),
+                        onPressed: () async {
+                          writeSharerTopic(subjectList[index]);},
                         child: Text(
                           subjectList[index],
                           softWrap: true,

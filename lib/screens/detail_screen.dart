@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_netflix_responsive_ui/src/utils.dart';
 import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
 
 class DetailScreen extends StatelessWidget {
   final Content? content;
+  final String? sharer;
   // _DetailScreenState createState() => _DetailScreenState();
 
   const DetailScreen({
-    @required this.content
+    @required this.content,
+    @required this.sharer
   });
 
   @override
@@ -17,7 +20,10 @@ class DetailScreen extends StatelessWidget {
         backgroundColor: Colors.black,
         leading: IconButton(
             color: Colors.white,
-            onPressed: (){Navigator.pop(context);},
+            onPressed: (){
+              eraseRoomUserTouch(this.sharer!);
+              Navigator.pop(context);
+            },
             icon: Icon(Icons.arrow_back)
         ),
       ),

@@ -45,4 +45,8 @@ class Assets {
 
   static const String violetEvergarden = '${_images}violet_evergarden.jpg';
   static const String witcher = '${_images}witcher.jpg';
+
+  static const String pikachu = '${_images}pikachu.gif';
+  static const String squirtle = '${_images}squirtle.gif';
+  static const String penguin = '${_images}penguin2.gif';
 }

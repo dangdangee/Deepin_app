@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:group_button/group_button.dart';
 
+import 'package:flutter_netflix_responsive_ui/src/utils.dart';
 import 'package:flutter_netflix_responsive_ui/src/widgets.dart';
-import 'package:flutter_netflix_responsive_ui/screens/nav_screen.dart';
 import 'package:flutter_netflix_responsive_ui/firebase_options.dart';
+import 'package:flutter_netflix_responsive_ui/screens/nav_screen.dart';
+import 'package:flutter_netflix_responsive_ui/widgets/custom_app_bar.dart';
+
 
 enum ApplicationLoginState {
   emailAddress,
@@ -19,7 +23,7 @@ class Authentication extends StatelessWidget {
     required this.loginState,
     required this.email,
     required this.verifyEmail,
-    required this.signInWithEmailAndPassword,
+    required this.signInWithEmailAndPasswordAndRole,
     required this.cancelRegistration,
     required this.registerAccount,
   });
@@ -33,8 +37,9 @@ class Authentication extends StatelessWidget {
   final void Function(
     String email,
     String pssword,
+    String role,
     void Function(Exception e) error,
-  ) signInWithEmailAndPassword;
+  ) signInWithEmailAndPasswordAndRole;
   final void Function() cancelRegistration;
   final void Function(
     String email,
@@ -53,13 +58,60 @@ class Authentication extends StatelessWidget {
       case ApplicationLoginState.password:
         return PasswordForm(
           email: email!,
-          login: (email, password) {
-            signInWithEmailAndPassword(email, password,
+          login: (email, password, role) {
+            signInWithEmailAndPasswordAndRole(email, password, role,
                 (e) => _showErrorDialog(context, 'Failed to sign in', e));
           },
         );
       case ApplicationLoginState.loggedIn:
-        return NavScreen();
+        return FutureBuilder(
+          future: readSharerUser(),
+          builder: (BuildContext context, AsyncSnapshot snapshot_) {
+            if (snapshot_.hasData == false) {
+              return CircularProgressIndicator();
+            }
+
+            else if (snapshot_.hasError) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Error: ${snapshot_.error}',
+                  style: TextStyle(fontSize: 15),
+                ),
+              );
+            }
+
+            else {
+              String sharer = snapshot_.data;
+              return StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance.collection('rooms').doc(
+                    '0').collection('users').doc(sharer).snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasData == false) {
+                    return CircularProgressIndicator();
+                  }
+
+                  else if (snapshot.hasError) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Error: ${snapshot.error}',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    );
+                  }
+
+                  else {
+                    var data = snapshot.data;
+                    String topic = data!['topic'];
+                    return NavScreen(currentIndex:subjectList.indexOf(topic));
+                  }
+                }
+              );
+            }
+          }
+        );
       case ApplicationLoginState.register:
         return RegisterForm(
           email: email!,
@@ -332,8 +384,8 @@ class PasswordForm extends StatefulWidget {
     required this.login,
     required this.email,
   });
+  final void Function(String email, String password, String role) login;
   final String email;
-  final void Function(String email, String password) login;
   @override
   _PasswordFormState createState() => _PasswordFormState();
 }
@@ -342,11 +394,16 @@ class _PasswordFormState extends State<PasswordForm> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_PasswordFormState');
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _roleController = GroupButtonController();
+  List<String> _roles = const ['Viewer','Sharer'];
+  String? _role;
 
   @override
   void initState() {
     super.initState();
     _emailController.text = widget.email;
+    _role = _roles[0];
+    _roleController.selectIndex(0);
   }
 
   @override
@@ -354,77 +411,88 @@ class _PasswordFormState extends State<PasswordForm> {
     return Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Header('Sign in'),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your email',
-                      hintStyle: TextStyle(color: Colors.white),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Enter your email address to continue';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: TextStyle(color: Colors.white),
-                    ),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Enter your password';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const SizedBox(width: 16),
-                      StyledButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            widget.login(
-                              _emailController.text,
-                              _passwordController.text,
-                            );
+          children: [
+            const Header('Sign in'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: TextFormField(
+                        style: TextStyle(color: Colors.white),
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter your email',
+                          hintStyle: TextStyle(color: Colors.white),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Enter your email address to continue';
                           }
+                          return null;
                         },
-                        child: const Text('SIGN IN', style: TextStyle(color: Colors.white),),
                       ),
-                      const SizedBox(width: 30),
-                    ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: TextFormField(
+                        style: TextStyle(color: Colors.white),
+                        controller: _passwordController,
+                        decoration: const InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: TextStyle(color: Colors.white),
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Enter your password';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: GroupButton(
+                    buttons: _roles,
+                    controller: _roleController,
+                    onSelected: (i, _) => {
+                        _role = _roles[i],}
                   ),
                 ),
-              ],
+                Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const SizedBox(width: 16),
+                          StyledButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                widget.login(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  _role!,
+                                );
+                              }
+                            },
+                            child: const Text('SIGN IN', style: TextStyle(color: Colors.white),),
+                          ),
+                          const SizedBox(width: 30),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-      ],
-    ));
+    );
   }
 }
 
@@ -437,10 +505,18 @@ class ApplicationState extends ChangeNotifier {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-
-    FirebaseAuth.instance.userChanges().listen((user) {
-      if (user != null) {
-        _loginState = ApplicationLoginState.loggedIn;
+    bool? role_exist;
+    FirebaseAuth.instance.userChanges().listen((user) async {
+      if (user != null && user.displayName != null) {
+        // displayName 없으면 회원가입 후 컨텐츠 떴다가 다시 sign in 창으로 돌아감.
+        await readRoomUser(user.displayName!).then((result) => role_exist = result);
+        if (role_exist == true) {
+          _loginState = ApplicationLoginState.loggedIn;
+          this.role = await readRoomUserRole(user.displayName!);
+          this.displayName = user.displayName;
+        } else {
+          _loginState = ApplicationLoginState.emailAddress;
+        }
       } else {
         _loginState = ApplicationLoginState.emailAddress;
       }
@@ -454,6 +530,7 @@ class ApplicationState extends ChangeNotifier {
   String? _email;
   String? get email => _email;
   String? displayName;
+  String? role;
 
   Future<void> verifyEmail(
       String email,
@@ -474,9 +551,10 @@ class ApplicationState extends ChangeNotifier {
     }
   }
 
-  Future<void> signInWithEmailAndPassword(
+  Future<void> signInWithEmailAndPasswordAndRole(
       String email,
       String password,
+      String role,
       void Function(FirebaseAuthException e) errorCallback,
       ) async {
     try {
@@ -484,6 +562,12 @@ class ApplicationState extends ChangeNotifier {
         email: email,
         password: password,
       );
+      await getDisplayName();
+      await writeRoomUserDisplayRole(this.displayName!, role);
+      this.role = role;
+      if (role == 'Sharer') {
+        writeSharerTopic(subjectList[0]);
+      }
     } on FirebaseAuthException catch (e) {
       errorCallback(e);
     }
@@ -503,12 +587,14 @@ class ApplicationState extends ChangeNotifier {
       var credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       await credential.user!.updateDisplayName(displayName);
+      await writeUser(displayName);
+      signOut();
     } on FirebaseAuthException catch (e) {
       errorCallback(e);
     }
   }
 
-  void getDisplayName() {
+  Future<void> getDisplayName() async {
     this.displayName = FirebaseAuth.instance.currentUser!.displayName;
   }
 

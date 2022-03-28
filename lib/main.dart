@@ -10,10 +10,6 @@ void main() {
       create: (context) => ApplicationState(),
       //builder: (context, _) => MyApp(),
     ),
-    ChangeNotifierProvider(
-      create: (context) => Content(),
-      //builder: (context, _) => MyApp(),
-    ),
   ],
   child: MyApp()));
 }
@@ -34,7 +30,7 @@ class MyApp extends StatelessWidget {
                 email: appState.email,
                 loginState: appState.loginState,
                 verifyEmail: appState.verifyEmail,
-                signInWithEmailAndPassword: appState.signInWithEmailAndPassword,
+                signInWithEmailAndPasswordAndRole: appState.signInWithEmailAndPasswordAndRole,
                 cancelRegistration: appState.cancelRegistration,
                 registerAccount: appState.registerAccount,
               )
