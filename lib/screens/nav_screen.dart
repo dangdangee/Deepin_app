@@ -50,7 +50,7 @@ class _NavScreenState extends State<NavScreen> {
 
 
 Widget Profile (BuildContext context, Size screenSize, double index) {
-  String? profile_url;
+  String profile_url;
   if (index == 1) {
     profile_url = Assets.profile1;
   }
@@ -73,7 +73,7 @@ Widget Profile (BuildContext context, Size screenSize, double index) {
             children: [
               Padding(
                 padding: EdgeInsets.all(10),
-                child: Image.asset(profile_url!),
+                child: Image.asset(profile_url),
               ),
               Padding(
                 padding: EdgeInsets.all(0),
@@ -90,13 +90,13 @@ Widget Profile (BuildContext context, Size screenSize, double index) {
               },
             ),
           ],
-        );},
-    )
-    },
+        );
+      },
+    )},
     child: Container(
       padding: EdgeInsets.all(3),
       width: screenSize.width / 3,
-      child: Image.asset(profile_url!),
+      child: Image.asset(profile_url),
     ),
   );
 }

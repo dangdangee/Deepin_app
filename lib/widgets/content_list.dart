@@ -101,6 +101,7 @@ class ContentList extends StatelessWidget {
                                       fullscreenDialog: true,
                                       builder: (BuildContext context) =>
                                           DetailScreen(
+                                            content_list: contentList!,
                                             content: contentList![contentnameList!
                                                 .indexOf(sharer_item)],
                                             sharer: sharer,

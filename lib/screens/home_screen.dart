@@ -6,6 +6,8 @@ import 'package:flutter_netflix_responsive_ui/data/data.dart';
 import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
 import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
 
+import '../main.dart';
+
 class HomeScreen extends StatefulWidget {
   String? topic;
   HomeScreen({

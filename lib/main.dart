@@ -23,9 +23,9 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Netflix UI',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          scaffoldBackgroundColor: Colors.black,
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            scaffoldBackgroundColor: Colors.black,
           ),
           home: Consumer<ApplicationState>(
                 builder: (context, appState, _) => Authentication(

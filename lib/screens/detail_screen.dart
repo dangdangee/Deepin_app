@@ -7,11 +7,13 @@ import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
 import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
 
 class DetailScreen extends StatefulWidget {
+  final List<Content>? content_list;
   final Content? content;
   final String? sharer;
 
   DetailScreen({
     Key? key,
+    @required this.content_list,
     @required this.content,
     @required this.sharer,
   }) : super(key:key);
@@ -22,6 +24,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   ScrollController? _scrollController;
+  List<Content>? content_list;
 
   @override
   void initState() {
@@ -30,6 +33,7 @@ class _DetailScreenState extends State<DetailScreen> {
         context.read<AppBarCubit>().setOffset(_scrollController!.offset);
       });
     super.initState();
+    this.content_list = content_list;
   }
 
   @override
@@ -40,6 +44,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    this.content_list = widget.content_list!.toList();
+    this.content_list!.remove(widget.content!);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery
@@ -51,7 +57,7 @@ class _DetailScreenState extends State<DetailScreen> {
             color: Colors.white,
             onPressed: () {
               eraseRoomUserTouch(widget.sharer!);
-              Navigator.pop(context);
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
             icon: Icon(Icons.arrow_back)
         ),
@@ -75,7 +81,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: ContentList(
                 key: PageStorageKey('myList'),
                 title: '',
-                contentList: myList,
+                contentList: this.content_list!,
               ),
             ),
           ],
@@ -84,140 +90,3 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 }
-
-/*
-Scaffold(
-            extendBodyBehindAppBar: false,
-            bottomNavigationBar: BottomAppBar(
-              color: Colors.black,
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () =>
-                    {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            // title: new Text("Alert Dialog title"),
-                            content: Wrap(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Image.asset(Assets.profile1),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(0),
-                                  child: Text(
-                                      "I'm interested in soccer, music, movie!"),
-                                ),
-                              ],
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text("Close"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      )
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(3),
-                      width: screenSize.width / 3,
-                      child: Image.asset(Assets.profile1),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () =>
-                    {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            // title: new Text("Alert Dialog title"),
-                            content: Wrap(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Image.asset(Assets.profile2),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(0),
-                                  child: Text(
-                                      "I'm interested in soccer, music, movie!"),
-                                ),
-                              ],
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text("Close"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      )
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(3),
-                      width: screenSize.width / 3,
-                      child: Image.asset(Assets.profile2),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () =>
-                    {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            // title: new Text("Alert Dialog title"),
-                            content: Wrap(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Image.asset(Assets.profile3),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(0),
-                                  child: Text(
-                                      "I'm interested in soccer, music, movie!"),
-                                ),
-                              ],
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text("Close"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      )
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(3),
-                      width: screenSize.width / 3,
-                      child: Image.asset(Assets.profile3),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            appBar: PreferredSize(
-              preferredSize: Size(screenSize.width, 50.0),
-              child: BlocBuilder<AppBarCubit, double>(
-                builder: (context, scrollOffset) {
-                  return CustomAppBar(scrollOffset: scrollOffset);
-                },
-              ),
-            ),
- */
