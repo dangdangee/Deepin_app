@@ -8,6 +8,8 @@ import 'package:flutter_netflix_responsive_ui/screens/screens.dart';
 import 'package:flutter_netflix_responsive_ui/src/utils.dart';
 import 'package:flutter_netflix_responsive_ui/src/authentication.dart';
 
+import '../data/data.dart';
+
 
 class ContentList extends StatelessWidget {
   final String? title;
@@ -36,7 +38,7 @@ class ContentList extends StatelessWidget {
         future: readViewerUsers(),
         builder: (BuildContext context, AsyncSnapshot snapshot_) {
           if (snapshot_.hasData == false) {
-            return CircularProgressIndicator();
+            return const Center(child:CircularProgressIndicator());
           }
 
           else if (snapshot_.hasError) {
@@ -55,7 +57,7 @@ class ContentList extends StatelessWidget {
                 stream: FirebaseFirestore.instance.collection('rooms').doc('0').collection('users').snapshots(),
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData == false) {
-                    return CircularProgressIndicator();
+                    return const Center(child:CircularProgressIndicator());
                   }
 
                   else if (snapshot.hasError) {
@@ -153,7 +155,15 @@ class ContentList extends StatelessWidget {
                                             },
                                             child: Stack(
                                               children: <Widget>[
-                                                Container(
+                                                (content.imageUrl!.contains("mp4") ||
+                                                content.imageUrl!.contains("gif")) ?
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 8.0),
+                                                  child:StackedVideoView(videoUrl:content.imageUrl!,height:200,
+                                                    in_detailscreen:false),
+                                                ):Container(
                                                   margin: const EdgeInsets
                                                       .symmetric(
                                                       horizontal: 8.0),
@@ -161,8 +171,7 @@ class ContentList extends StatelessWidget {
                                                   width: 130.0,
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
-                                                      image: AssetImage(
-                                                          content.imageUrl!),
+                                                      image: Image.network(content.imageUrl!).image,
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),

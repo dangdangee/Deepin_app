@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
 import 'package:flutter_netflix_responsive_ui/data/data.dart';
+import 'package:flutter_netflix_responsive_ui/src/utils.dart';
+import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
 import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
 import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
 
@@ -43,10 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _topic = widget.topic;
     final Size screenSize = MediaQuery.of(context).size;
     return FutureBuilder(
-      future: get_contentlist('soccer/epl/'),
+      future: get_contentlist(_topic!),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData == false) {
-          return CircularProgressIndicator();
+          return const Center(child:CircularProgressIndicator());
         }
 
         else if (snapshot.hasError) {
@@ -60,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         else {
-          List<Content> content_list = snapshot.data! as List<Content>;
+          var content_list_and_names = snapshot.data!;
+          List<List<Content>> content_list = content_list_and_names[0] as List<List<Content>>;
+          List<String> dirnames = content_list_and_names[1] as List<String>;
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: Size(screenSize.width, 50.0),
@@ -72,18 +75,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: CustomScrollView(
               controller: _scrollController,
-              slivers: [
-                /*SliverToBoxAdapter(
-                  child: ContentHeader(featuredContent: sintelContent),
-                ),*/
+              slivers:
+              List.generate(content_list.length, (int index) =>
                 SliverToBoxAdapter(
                   child: ContentList(
-                    key: PageStorageKey(_topic),
-                    title: _topic,
-                    contentList: content_list,
+                    key: PageStorageKey(dirnames[index].toCapitalized()),
+                    title: dirnames[index].toCapitalized(),
+                    contentList: content_list[index],
                   ),
                 ),
-              ],
+              ),
             ),
           );
         }

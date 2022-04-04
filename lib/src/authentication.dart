@@ -68,7 +68,7 @@ class Authentication extends StatelessWidget {
           future: readSharerUser(),
           builder: (BuildContext context, AsyncSnapshot snapshot_) {
             if (snapshot_.hasData == false) {
-              return CircularProgressIndicator();
+              return const Center(child:CircularProgressIndicator());
             }
 
             else if (snapshot_.hasError) {
@@ -89,7 +89,7 @@ class Authentication extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasData == false) {
-                    return CircularProgressIndicator();
+                    return const Center(child:CircularProgressIndicator());
                   }
 
                   else if (snapshot.hasError) {

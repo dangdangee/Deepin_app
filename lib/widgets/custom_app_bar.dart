@@ -36,10 +36,10 @@ class CustomAppBar extends StatelessWidget {
 const IconData shirt = IconData(0xe82c, fontFamily: "customappbar", fontPackage: null);
 
 Map<String, IconData> subjectList = {
-  'Soccer':Icons.sports_soccer_outlined,
+  'soccer':Icons.sports_soccer_outlined,
   'Fashion':Icons.dry_cleaning,
   'Music':Icons.music_note_rounded,
-  'Entertainment':Icons.grade,
+  'entertain':Icons.grade,
   'Movie/Drama': Icons.movie_outlined,
   'Game':Icons.videogame_asset,
   'Food/Restaurant':Icons.dining_outlined,
@@ -58,7 +58,7 @@ class _CustomAppBarMobile extends StatelessWidget {
     return SafeArea(
       child: Row(
         children: [
-          Image.asset(Assets.netflixLogo0),
+          Image.asset(Assets.deepinLogo),
           SizedBox(width:5),
           Expanded(
               child:ListView.builder(
@@ -73,7 +73,7 @@ class _CustomAppBarMobile extends StatelessWidget {
                       child: IconButton(
                           padding: EdgeInsets.only(bottom:10),
                           splashRadius: 30,
-                          tooltip: subjectList.keys.elementAt(index),
+                          tooltip: subjectList.keys.elementAt(index).toCapitalized(),
                           onPressed: () async {
                             writeSharerTopic(subjectList.keys.elementAt(index));},
                           iconSize: 30,

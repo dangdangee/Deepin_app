@@ -4,6 +4,7 @@ import 'package:flutter_netflix_responsive_ui/src/utils.dart';
 class Content {
   final String? name;
   final String? imageUrl;
+  final String? parent_name;
   final String? titleImageUrl;
   final String? videoUrl;
   final String? description;
@@ -12,6 +13,7 @@ class Content {
   Content({
     @required this.name,
     @required this.imageUrl,
+    @required this.parent_name,
     this.titleImageUrl,
     this.videoUrl,
     this.description,

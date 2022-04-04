@@ -5,7 +5,6 @@ import 'package:flutter_netflix_responsive_ui/screens/screens.dart';
 import 'package:flutter_netflix_responsive_ui/widgets/custom_app_bar.dart';
 import 'package:flutter_netflix_responsive_ui/assets.dart';
 
-
 class NavScreen extends StatefulWidget {
   int? currentIndex;
   NavScreen({
