@@ -105,7 +105,8 @@ class Authentication extends StatelessWidget {
                   else {
                     var data = snapshot.data;
                     String topic = data!['topic'];
-                    return NavScreen(currentIndex:subjectList.indexOf(topic));
+                    return NavScreen(currentIndex:
+                      subjectList.keys.toList().indexOf(topic));
                   }
                 }
               );
@@ -566,7 +567,7 @@ class ApplicationState extends ChangeNotifier {
       await writeRoomUserDisplayRole(this.displayName!, role);
       this.role = role;
       if (role == 'Sharer') {
-        writeSharerTopic(subjectList[0]);
+        writeSharerTopic(subjectList.keys.first);
       }
     } on FirebaseAuthException catch (e) {
       errorCallback(e);

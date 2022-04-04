@@ -1,7 +1,9 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
 import 'package:flutter_netflix_responsive_ui/src/authentication.dart';
 
 void main() {

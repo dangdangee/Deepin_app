@@ -1,12 +1,17 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
 import 'package:flutter_netflix_responsive_ui/data/data.dart';
 import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
-import 'package:flutter_netflix_responsive_ui/assets.dart';
+import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  String? topic;
+  HomeScreen({
+    Key? key,
+    @required this.topic,
+  }) : super(key:key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -14,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController? _scrollController;
+  String? _topic;
 
   @override
   void initState() {
@@ -32,165 +38,54 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _topic = widget.topic;
     final Size screenSize = MediaQuery.of(context).size;
-    return Scaffold(
-      extendBodyBehindAppBar: false,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
-        child: Row(
-          children: [
-            InkWell(
-              onTap: () => {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      // title: new Text("Alert Dialog title"),
-                      content: Wrap(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Image.asset(Assets.profile1),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(0),
-                            child: Text("I'm interested in soccer, music, movie!"),
-                          ),
-                        ],
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text("Close"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                )
-              },
-              child:Container(
-                padding: EdgeInsets.all(3),
-                width: screenSize.width/3,
-                child: Image.asset(Assets.profile1),
+    return FutureBuilder(
+      future: get_contentlist('soccer/epl/'),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData == false) {
+          return CircularProgressIndicator();
+        }
+
+        else if (snapshot.hasError) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Error: ${snapshot.error}',
+              style: TextStyle(fontSize: 15),
+            ),
+          );
+        }
+
+        else {
+          List<Content> content_list = snapshot.data! as List<Content>;
+          return Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size(screenSize.width, 50.0),
+              child: BlocBuilder<AppBarCubit, double>(
+                builder: (context, scrollOffset) {
+                  return CustomAppBar(scrollOffset: scrollOffset);
+                },
               ),
             ),
-            InkWell(
-              onTap: ()=>{
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      // title: new Text("Alert Dialog title"),
-                      content: Wrap(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Image.asset(Assets.profile2),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(0),
-                            child: Text("I'm interested in soccer, music, movie!"),
-                          ),
-                        ],
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text("Close"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                )
-              },
-              child:Container(
-                padding: EdgeInsets.all(3),
-                width: screenSize.width/3,
-                child: Image.asset(Assets.profile2),
-              ),
+            body: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                /*SliverToBoxAdapter(
+                  child: ContentHeader(featuredContent: sintelContent),
+                ),*/
+                SliverToBoxAdapter(
+                  child: ContentList(
+                    key: PageStorageKey(_topic),
+                    title: _topic,
+                    contentList: content_list,
+                  ),
+                ),
+              ],
             ),
-            InkWell(
-              onTap: ()=>{
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      // title: new Text("Alert Dialog title"),
-                      content: Wrap(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Image.asset(Assets.profile3),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(0),
-                            child: Text("I'm interested in soccer, music, movie!"),
-                          ),
-                        ],
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text("Close"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                )
-              },
-              child:Container(
-                padding: EdgeInsets.all(3),
-                width: screenSize.width/3,
-                child: Image.asset(Assets.profile3),
-              ),
-            ),
-          ],
-        ),
-      ),
-      appBar: PreferredSize(
-        preferredSize: Size(screenSize.width, 50.0),
-        child: BlocBuilder<AppBarCubit, double>(
-          builder: (context, scrollOffset) {
-            return CustomAppBar(scrollOffset: scrollOffset);
-          },
-        ),
-      ),
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          /*SliverToBoxAdapter(
-            child: ContentHeader(featuredContent: sintelContent),
-          ),*/
-          SliverToBoxAdapter(
-            child: ContentList(
-              key: PageStorageKey('myList'),
-              title: 'My List',
-              contentList: myList,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ContentList(
-              key: PageStorageKey('originals'),
-              title: 'Netflix Originals',
-              contentList: originals,
-              // isOriginals: true,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ContentList(
-              key: PageStorageKey('trending'),
-              title: 'Trending',
-              contentList: trending,
-            ),
-          ),
-        ],
-      ),
+          );
+        }
+      }
     );
   }
 }

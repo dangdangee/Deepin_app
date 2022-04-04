@@ -33,12 +33,19 @@ class CustomAppBar extends StatelessWidget {
   }
 }
 
-List <String>subjectList = [
-  'Soccer',
-  'Music',
-  'Webtoon',
-  'Investment'
-];
+const IconData shirt = IconData(0xe82c, fontFamily: "customappbar", fontPackage: null);
+
+Map<String, IconData> subjectList = {
+  'Soccer':Icons.sports_soccer_outlined,
+  'Fashion':Icons.dry_cleaning,
+  'Music':Icons.music_note_rounded,
+  'Entertainment':Icons.grade,
+  'Movie/Drama': Icons.movie_outlined,
+  'Game':Icons.videogame_asset,
+  'Food/Restaurant':Icons.dining_outlined,
+  'Baseball':Icons.sports_baseball_outlined,
+  'Investment':Icons.attach_money,
+};
 
 class _CustomAppBarMobile extends StatelessWidget {
   const _CustomAppBarMobile({
@@ -52,28 +59,26 @@ class _CustomAppBarMobile extends StatelessWidget {
       child: Row(
         children: [
           Image.asset(Assets.netflixLogo0),
+          SizedBox(width:5),
           Expanded(
               child:ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: subjectList.length,
+                  itemCount: subjectList.keys.length,
                   itemBuilder: (BuildContext context, int index) => Container(
                     //color: Colors.white,
-                    height: 100,
-                    width: 100,
-                    margin: EdgeInsets.all(5),
+                    height: 50,
+                    width: 50,
                     child: Center(
-                      child: ElevatedButton(
-                        // style: ButtonStyle(
-                        //   backgroundColor: MaterialStateProperty<Color>{}
-                        // ),
-                        onPressed: () async {
-                          writeSharerTopic(subjectList[index]);},
-                        child: Text(
-                          subjectList[index],
-                          softWrap: true,
-                          // textScaleFactor: 0.1,
-                        ),
+                      child: IconButton(
+                          padding: EdgeInsets.only(bottom:10),
+                          splashRadius: 30,
+                          tooltip: subjectList.keys.elementAt(index),
+                          onPressed: () async {
+                            writeSharerTopic(subjectList.keys.elementAt(index));},
+                          iconSize: 30,
+                          icon: Icon(subjectList.values.elementAt(index)),
+                          color: Colors.white,
                       ),
                     ),
                   )
