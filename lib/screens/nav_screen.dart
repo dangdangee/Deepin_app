@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
-import 'package:flutter_netflix_responsive_ui/screens/screens.dart';
-import 'package:flutter_netflix_responsive_ui/widgets/custom_app_bar.dart';
-import 'package:flutter_netflix_responsive_ui/assets.dart';
+import 'package:deepin/cubits/cubits.dart';
+import 'package:deepin/screens/screens.dart';
+import 'package:deepin/widgets/custom_app_bar.dart';
+import 'package:deepin/assets.dart';
 
 class NavScreen extends StatefulWidget {
   int? currentIndex;

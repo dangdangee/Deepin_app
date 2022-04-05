@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:flutter_netflix_responsive_ui/models/models.dart';
-import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
+import 'package:deepin/models/models.dart';
+import 'package:deepin/widgets/widgets.dart';
 
 class ContentHeader extends StatelessWidget {
   final Content? featuredContent;

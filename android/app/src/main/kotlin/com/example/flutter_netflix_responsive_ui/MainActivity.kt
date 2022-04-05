@@ -1,4 +1,4 @@
-package com.example.flutter_netflix_responsive_ui
+package com.example.deepin
 
 import io.flutter.embedding.android.FlutterActivity
 

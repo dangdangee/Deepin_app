@@ -1,10 +1,7 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_netflix_responsive_ui/src/authentication.dart';
+import 'package:deepin/src/authentication.dart';
 
 void main() {
   runApp(MultiProvider(providers:[
@@ -20,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-          title: 'Flutter Netflix UI',
+          title: 'Deepin',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,

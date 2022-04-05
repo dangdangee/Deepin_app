@@ -4,11 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:group_button/group_button.dart';
 
-import 'package:flutter_netflix_responsive_ui/src/utils.dart';
-import 'package:flutter_netflix_responsive_ui/src/widgets.dart';
-import 'package:flutter_netflix_responsive_ui/firebase_options.dart';
-import 'package:flutter_netflix_responsive_ui/screens/nav_screen.dart';
-import 'package:flutter_netflix_responsive_ui/widgets/custom_app_bar.dart';
+import 'package:deepin/src/utils.dart';
+import 'package:deepin/src/widgets.dart';
+import 'package:deepin/firebase_options.dart';
+import 'package:deepin/screens/nav_screen.dart';
+import 'package:deepin/widgets/custom_app_bar.dart';
 
 
 enum ApplicationLoginState {

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:flutter_netflix_responsive_ui/assets.dart';
-import 'package:flutter_netflix_responsive_ui/models/models.dart';
-import 'package:flutter_netflix_responsive_ui/screens/screens.dart';
-import 'package:flutter_netflix_responsive_ui/src/utils.dart';
-import 'package:flutter_netflix_responsive_ui/src/authentication.dart';
+import 'package:deepin/assets.dart';
+import 'package:deepin/models/models.dart';
+import 'package:deepin/screens/screens.dart';
+import 'package:deepin/src/utils.dart';
+import 'package:deepin/src/authentication.dart';
 
 import '../data/data.dart';
 
@@ -28,9 +28,9 @@ class ContentList extends StatelessWidget {
     if (this.contentList != null) {
       this.contentList!.forEach((content) {
         if (this.contentnameList != null) {
-          this.contentnameList!.add(content.name!);
+          this.contentnameList!.add(content.parent_name!+"/"+content.name!);
         } else {
-          this.contentnameList = [content.name!];
+          this.contentnameList = [content.parent_name!+"/"+content.name!];
         }
       });
     }
@@ -149,21 +149,13 @@ class ContentList extends StatelessWidget {
                                             onTap: () async {
                                               content.touch(
                                                   appState.displayName!,
-                                                  touched_items[content.name]
+                                                  touched_items[content.parent_name!+"/"+content.name!]
                                                       ?.contains(
                                                       appState.displayName!));
                                             },
                                             child: Stack(
                                               children: <Widget>[
-                                                (content.imageUrl!.contains("mp4") ||
-                                                content.imageUrl!.contains("gif")) ?
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 8.0),
-                                                  child:StackedVideoView(videoUrl:content.imageUrl!,height:200,
-                                                    in_detailscreen:false),
-                                                ):Container(
+                                                Container(
                                                   margin: const EdgeInsets
                                                       .symmetric(
                                                       horizontal: 8.0),
@@ -186,10 +178,9 @@ class ContentList extends StatelessWidget {
                                                       child: (touched_items
                                                           .keys
                                                           .contains(
-                                                          content.name)) ?
+                                                          content.parent_name!+"/"+content.name!)) ?
                                                       Row(children: [
-                                                        (touched_items[content
-                                                            .name]!.contains(
+                                                        (touched_items[content.parent_name!+"/"+content.name!]!.contains(
                                                             viewerUsers
                                                                 .elementAt(
                                                                 0)))
@@ -204,8 +195,7 @@ class ContentList extends StatelessWidget {
                                                             .shrink(),
                                                         (viewerUsers.length ==
                                                             2 &&
-                                                            touched_items[content
-                                                                .name]!
+                                                            touched_items[content.parent_name!+"/"+content.name!]!
                                                                 .contains(
                                                                 viewerUsers
                                                                     .elementAt(

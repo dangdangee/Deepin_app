@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_netflix_responsive_ui/src/utils.dart';
+import 'package:deepin/src/utils.dart';
 
 class Content {
   final String? name;
@@ -24,7 +24,7 @@ class Content {
     if (exists == true) {
       eraseRoomUserTouch(displayName);
     } else {
-      writeRoomUserTouch(displayName, this.name!);
+      writeRoomUserTouch(displayName, this.parent_name!+"/"+this.name!);
     }
   }
 }

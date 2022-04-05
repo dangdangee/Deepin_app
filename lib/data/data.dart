@@ -5,8 +5,8 @@ import 'package:stacked/stacked.dart';
 import 'package:video_player/video_player.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-import 'package:flutter_netflix_responsive_ui/assets.dart';
-import 'package:flutter_netflix_responsive_ui/models/models.dart';
+import 'package:deepin/assets.dart';
+import 'package:deepin/models/models.dart';
 
 final Content sintelContent = Content(
   name: 'Sintel',
@@ -43,18 +43,33 @@ Future<List<dynamic>> get_contentlist(String dirname) async { // 'entertain'
   List<String> directorylists = await listDirectory(storage, dirname+"/");
   List<List<String>> filelists = [];
   List<Map<String,String>> file2urls = [];
+  List<Map<String,String>> file2thumbnails = [];
   await Future.forEach(directorylists, (directory) async {
-    var listfile_output = await listFile(storage, dirname+"/${directory}");
-    List<String> tmp_filelists = listfile_output[0];
-    Map<String, String> file2url = listfile_output[1];
+    var file_url = await listFile(storage, dirname+"/${directory}");
+    List<String> tmp_filelists = file_url[0];
+    Map<String, String> tmp_file2urls = file_url[1];
+    var thumbnail_url = await listFile(storage, dirname+"/${directory}/thumbnail");
+    List<String> tmp_thumbnaillists = thumbnail_url[0];
+    Map<String, String> tmp_thumbnail2urls = thumbnail_url[1];
+    Map<String, String> tmp_file2thumbnails = {};
+    await Future.forEach(tmp_filelists, (String file) async {
+      if (file.contains("mp4") || file.contains("gif")) {
+        String tmp_thumbnail = tmp_thumbnaillists.singleWhere((element) => element.contains(file.split(".")[0]));
+        tmp_file2thumbnails[file] = tmp_thumbnail2urls[tmp_thumbnail]!;
+      }
+    });
     filelists.add(tmp_filelists);
-    file2urls.add(file2url);
+    file2urls.add(tmp_file2urls);
+    file2thumbnails.add(tmp_file2thumbnails);
   });
 
   return [List.generate(filelists.length, (int index1) => List.generate(filelists[index1].length, (int index2) =>
     Content(
       name: filelists[index1][index2].split('.')[0],
-      imageUrl: file2urls[index1][filelists[index1][index2]],
+      imageUrl: file2thumbnails[index1].keys.contains(filelists[index1][index2]) ?
+      file2thumbnails[index1][filelists[index1][index2]]:file2urls[index1][filelists[index1][index2]],
+      videoUrl: file2thumbnails[index1].keys.contains(filelists[index1][index2]) ?
+      file2urls[index1][filelists[index1][index2]]:null,
       parent_name: directorylists[index1],
     ),
     growable:false)), directorylists];
@@ -67,6 +82,7 @@ class StackedVideoViewModel extends BaseViewModel {
     videoPlayerController = VideoPlayerController.network(videoUrl);
     videoPlayerController!.initialize().then((value) {
       videoPlayerController!.setLooping(true);
+      videoPlayerController!.play();
       notifyListeners();
     });
   }
@@ -91,13 +107,11 @@ class StackedVideoViewModel extends BaseViewModel {
 class StackedVideoView extends StatelessWidget {
   final String? videoUrl;
   final double? height;
-  final bool? in_detailscreen;
 
   StackedVideoView({
     Key? key,
     @required this.videoUrl,
     @required this.height,
-    @required this.in_detailscreen,
   }) : super(key: key);
 
   @override
@@ -110,7 +124,7 @@ class StackedVideoView extends StatelessWidget {
       builder: (context, model, child) {
         bool isInitialized = model.videoPlayerController!.value.isInitialized;
         bool isPlaying = model.videoPlayerController!.value.isPlaying;
-        double height = 200; //this.height!; //model.videoPlayerController!.value.size.height;
+        double height = this.height!;
         double width = height*model.videoPlayerController!.value.size.aspectRatio;
         return isInitialized ?
         FittedBox(
@@ -120,7 +134,7 @@ class StackedVideoView extends StatelessWidget {
             width: width,
             child: GestureDetector(
                 onTap: () =>
-                in_detailscreen! ? (isPlaying ? model.pauseVideo() : model.playVideo()):null,
+                isPlaying ? model.pauseVideo() : model.playVideo(),
                 child: VideoPlayer(model.videoPlayerController!),
               )
           )

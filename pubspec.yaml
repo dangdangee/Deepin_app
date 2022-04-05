@@ -1,4 +1,4 @@
-name: flutter_netflix_responsive_ui
+name: deepin
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -35,9 +35,8 @@ dependencies:
   cloud_firestore: ^3.1.4
   provider: ^6.0.1
   group_button: ^4.7.0
-  path_provider:
-  firebase_storage:
-  stacked:
+  firebase_storage: ^10.2.8
+  stacked: ^2.3.0
 
 dev_dependencies:
   flutter_test:

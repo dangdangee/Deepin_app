@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_netflix_responsive_ui/data/data.dart';
-import 'package:flutter_netflix_responsive_ui/src/utils.dart';
-import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
-import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
-import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
+import 'package:deepin/data/data.dart';
+import 'package:deepin/src/utils.dart';
+import 'package:deepin/cubits/cubits.dart';
+import 'package:deepin/widgets/widgets.dart';
+import 'package:deepin/models/content_model.dart';
 
 class DetailScreen extends StatefulWidget {
   final List<Content>? content_list;
@@ -63,23 +63,21 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
       ),
       body: Column(children: [
-        (widget.content!.imageUrl!.contains("mp4") ||
-        widget.content!.imageUrl!.contains("gif")) ?
+        (widget.content!.videoUrl != null) ?
         Padding(
           padding: const EdgeInsets
               .symmetric(
               horizontal: 8.0),
-          child:StackedVideoView(videoUrl:widget.content!.imageUrl!,
-            height:MediaQuery.of(context).size.height*0.5,
-            in_detailscreen:true),
+          child:StackedVideoView(videoUrl:widget.content!.videoUrl!,
+            height:MediaQuery.of(context).size.height*0.5,)
         ):
         Container(
           height: MediaQuery.of(context).size.height*0.5,
-          width: MediaQuery.of(context).size.width*0.7,
+          width: MediaQuery.of(context).size.width*0.9,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: Image.network(widget.content!.imageUrl!).image,
-              fit: BoxFit.cover,
+              image: Image.network(widget.content!.imageUrl!,
+              fit: BoxFit.contain,).image,
             ),
           ),
         ),

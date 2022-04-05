@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_netflix_responsive_ui/data/data.dart';
-import 'package:flutter_netflix_responsive_ui/src/utils.dart';
-import 'package:flutter_netflix_responsive_ui/cubits/cubits.dart';
-import 'package:flutter_netflix_responsive_ui/widgets/widgets.dart';
-import 'package:flutter_netflix_responsive_ui/models/content_model.dart';
+import 'package:deepin/data/data.dart';
+import 'package:deepin/src/utils.dart';
+import 'package:deepin/cubits/cubits.dart';
+import 'package:deepin/widgets/widgets.dart';
+import 'package:deepin/models/content_model.dart';
 
-import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
   String? topic;
