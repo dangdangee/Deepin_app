@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:deepin/cubits/cubits.dart';
+import 'package:deepin/assets.dart';
 import 'package:deepin/screens/screens.dart';
 import 'package:deepin/widgets/custom_app_bar.dart';
-import 'package:deepin/assets.dart';
 
 class NavScreen extends StatefulWidget {
   int? currentIndex;
@@ -39,10 +37,11 @@ class _NavScreenState extends State<NavScreen> {
           ],
         ),
       ),
-      body: BlocProvider<AppBarCubit>(
-        create: (_) => AppBarCubit(),
-        child: _screens[_currentIndex!],
+      appBar: PreferredSize(
+          preferredSize: Size(screenSize.width, 50.0),
+          child: CustomAppBar()
       ),
+      body: _screens[_currentIndex!],
     );
   }
 }

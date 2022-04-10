@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:deepin/data/data.dart';
 import 'package:deepin/src/utils.dart';
-import 'package:deepin/cubits/cubits.dart';
 import 'package:deepin/widgets/widgets.dart';
 import 'package:deepin/models/content_model.dart';
 
@@ -25,10 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _scrollController = ScrollController()
-      ..addListener(() {
-        context.read<AppBarCubit>().setOffset(_scrollController!.offset);
-      });
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -41,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     _topic = widget.topic;
-    final Size screenSize = MediaQuery.of(context).size;
     return FutureBuilder(
       future: get_contentlist(_topic!),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -64,18 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
           List<List<Content>> content_list = content_list_and_names[0] as List<List<Content>>;
           List<String> dirnames = content_list_and_names[1] as List<String>;
           return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: Size(screenSize.width, 50.0),
-              child: BlocBuilder<AppBarCubit, double>(
-                builder: (context, scrollOffset) {
-                  return CustomAppBar(scrollOffset: scrollOffset);
-                },
-              ),
-            ),
             body: CustomScrollView(
               controller: _scrollController,
-              slivers:
-              List.generate(content_list.length, (int index) =>
+              slivers: List.generate(content_list.length, (int index) =>
                 SliverToBoxAdapter(
                   child: ContentList(
                     key: PageStorageKey(dirnames[index].toCapitalized()),

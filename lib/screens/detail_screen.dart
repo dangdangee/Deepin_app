@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:deepin/data/data.dart';
 import 'package:deepin/src/utils.dart';
-import 'package:deepin/cubits/cubits.dart';
 import 'package:deepin/widgets/widgets.dart';
 import 'package:deepin/models/content_model.dart';
 
@@ -28,10 +26,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void initState() {
-    _scrollController = ScrollController()
-      ..addListener(() {
-        context.read<AppBarCubit>().setOffset(_scrollController!.offset);
-      });
+    _scrollController = ScrollController();
     super.initState();
     this.content_list = content_list;
   }
