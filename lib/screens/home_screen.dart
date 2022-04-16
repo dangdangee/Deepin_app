@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       future: get_contentlist(_topic!),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData == false) {
-          return const Center(child:CircularProgressIndicator());
+          return const Center(child:CircularProgressIndicator()); // 이게 제일 처음 build에만 사용됨. 왜?
         }
 
         else if (snapshot.hasError) {
